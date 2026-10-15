@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: 'postgres:17' #current version of your postgresql - 1
+    pull_policy: if_not_present
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-expense_tracker}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD before starting Compose}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
