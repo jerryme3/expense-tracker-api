@@ -13,7 +13,8 @@ public record AccountRequest(
 		String email,
 
 		@NotBlank(message = "Password cannot be blanked.")
-		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&.])\\S{8,40}$", message = "Password must have at least one of these characters, with no space: letter, number, and special character.")
+		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&.])\\S{8,40}$",
+				 message = "Password must have at least one of these characters, with no space: letter, number, and special character.")
 		@Size(min = 8, max = 40, message = "Password length must be between or equal to 8 and 40 characters.")
 		String password
 ) {

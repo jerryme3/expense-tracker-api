@@ -82,8 +82,8 @@ abstract class ApiIntegrationTestSupport {
 		MvcResult result = mockMvc.perform(post("/api/v1/auth/login")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(login))
-				.andExpect(status().isOk())
-				.andReturn();
+						.andExpect(status().isOk())
+						.andReturn();
 
 		return com.jayway.jsonpath.JsonPath.read(
 				result.getResponse().getContentAsString(StandardCharsets.UTF_8),

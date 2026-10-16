@@ -3,6 +3,7 @@ package expense.tracker.v1.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,17 +20,18 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
-		http.csrf(csrf -> csrf.disable())
+	SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter) {
+		http.csrf(AbstractHttpConfigurer::disable)
 				.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/api/v1/auth/**", "/error").permitAll()
+						.requestMatchers("/api/v1/**", "/error").permitAll()
 						.anyRequest().authenticated());
 
 		http.oauth2ResourceServer(oauth2 -> oauth2
 				.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)));
-		http.formLogin(form -> form.disable())
-				.httpBasic(basic -> basic.disable());
+
+		http.formLogin(AbstractHttpConfigurer::disable)
+				.httpBasic(AbstractHttpConfigurer::disable);
 
 		return http.build();
 	}
@@ -42,6 +44,7 @@ public class SecurityConfig {
 
 		var authenticationConverter = new JwtAuthenticationConverter();
 		authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+
 		return authenticationConverter;
 	}
 
